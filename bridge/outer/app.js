@@ -25,7 +25,6 @@ console.log(config);
 app.get('/', async (req, res) => {
 	let json = req.body;
 	let embed;
-	console.log(json);
 
 	if(!json.type || !(json.message || json.attachment_msg || json.attachment_title) || !mainGuildID) {
 		return res.send({"success": 0});
