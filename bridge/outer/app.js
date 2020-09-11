@@ -1,5 +1,5 @@
 /*
-	Discord bridge
+	Discord outer bridge
 	todo: add sec key if you want to use it in opennet
 */
 
@@ -26,6 +26,8 @@ app.get('/', async (req, res) => {
 	let json = req.body;
 	let embed;
 
+	//console.log(req.body); // DEBUG comment me
+
 	if(!json.type || !(json.message || json.attachment_msg || json.attachment_title) || !mainGuildID) {
 		return res.send({"success": 0});
 	}
@@ -34,7 +36,7 @@ app.get('/', async (req, res) => {
 
 		json.type.forEach(type => {
 			if(!config["channels-map"][type]) {
-				throw "not mapped"; //just ignore request then
+				throw "not mapped"; // just ignore request then
 			}
 		});
 
@@ -50,14 +52,14 @@ app.get('/', async (req, res) => {
 	}
 
 	if(json.attachment_color) {
-		json.attachment_color = json.attachment_color.replace("#", "0x"); //why discord so strange
+		json.attachment_color = json.attachment_color.replace("#", "0x"); // why is discord so strange
 	}
 
-	embed = new Discord.RichEmbed();
+	embed = new Discord.MessageEmbed();
 
 	if(json.attachment_msg) {
-		if (json.attachment_msg.length > 2000) // RichEmbed limit
-			json.attachment_msg = json.attachment_msg.substring(0,2000) + "\n...cropped"
+		if (json.attachment_msg.length > 2000) // discord RichEmbed limit
+			json.attachment_msg = json.attachment_msg.substring(0,2000) + "\n...cropped";
 		embed.setDescription(json.attachment_msg);
 	}
 
@@ -73,37 +75,34 @@ app.get('/', async (req, res) => {
 		embed.setFooter(json.attachment_footer);
 	}
 
-	let message = "", mention;
+	let message = ``, mention;
 
 	if(json.mention && config["roles-map"][json.mention]) {
 
 		mention = config["roles-map"][json.mention];
 
-		if(mention === "here" || mention === "everyone" ) { 
+		if(mention === "here" || mention === "everyone" ) {
 			mention = "@" + mention;
 
-		} else { //if not common slaps, try to find a group
-			mention = await mainGuildID.roles.find(role => role.name === config["roles-map"][json.mention]);
-
-			if(!mention) { //maybe it is a user slap?
-				mention = await mainGuildID.user.find(role => role.members === config["roles-map"][json.mention]);
-			}
+		} else {
+			mention = await mainGuildID.roles.cache.find(role => role.name === config["roles-map"][json.mention]);
 		}
 	}
 
 	if(mention) {
-		message = mention + " ";
+		message = `${mention} `;
 	}
 
 	if(json.message) {
-		message += json.message;
+		message += `${json.message}`;
 	}
 
 	try {
 
 		json.type.forEach(async type => {
 			config["channels-map"][type].forEach(async channel => {
-				let targetChannel = await mainGuildID.channels.get(channel);
+				let targetChannel = await mainGuildID.channels.cache.get(channel);
+				//message = `DEBUG: ${type}\n ${message}`; // DEBUG comment me
 				if(message.length)
 					await targetChannel.send(message, embed);
 				else
@@ -124,5 +123,5 @@ client.login(discordToken);
 app.listen(3000);
 
 client.on('ready', async () => {
-	mainGuildID = await client.guilds.get(config["server-id"]);
+	mainGuildID = await client.guilds.cache.get(config["server-id"]);
 });
