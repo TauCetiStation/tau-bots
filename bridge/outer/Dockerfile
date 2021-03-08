@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:stretch-slim
 
 WORKDIR /usr/src/app
 
