@@ -1,0 +1,11 @@
+{
+  "name": "outer-bridge",
+  "main": "app.js",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "http2byond": "^2.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
