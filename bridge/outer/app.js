@@ -58,8 +58,8 @@ app.get('/', async (req, res) => {
 	embed = new Discord.MessageEmbed();
 
 	if(json.attachment_msg) {
-		if (json.attachment_msg.length > 2000) // discord RichEmbed limit
-			json.attachment_msg = json.attachment_msg.substring(0,2000) + "\n...cropped";
+		if (json.attachment_msg.length > 3000) // discord RichEmbed limit
+			json.attachment_msg = json.attachment_msg.substring(0,3000) + "\n...cropped";
 		embed.setDescription(json.attachment_msg);
 	}
 
