@@ -47,7 +47,7 @@ client.on('messageCreate', async message => {
 	}
 
 	// first arg is bot mention
-	if (args[0] !== "<@!"+client.user.id+">") {
+	if (args[0] !== "<@!"+client.user.id+">" || args[0] !== "<@"+client.user.id+">") {
 		return;
 	}
 
