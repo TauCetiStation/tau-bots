@@ -11,7 +11,9 @@ const bodyParser = require('body-parser');
 
 const config = require('./config.json');
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+	intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]
+});
 const app = express();
 
 const discordToken = process.env.DISCORD_TOKEN;
@@ -104,9 +106,9 @@ app.get('/', async (req, res) => {
 				let targetChannel = await mainGuildID.channels.cache.get(channel);
 				//message = `DEBUG: ${type}\n ${message}`; // DEBUG comment me
 				if(message.length)
-					await targetChannel.send(message, embed);
+					await targetChannel.send({ content: message, embeds: [embed] });
 				else
-					await targetChannel.send(embed);
+					await targetChannel.send({ embeds: [embed] });
 			});
 
 		});
