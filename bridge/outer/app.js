@@ -87,7 +87,11 @@ app.get('/', async (req, res) => {
 			mention = "@" + mention;
 
 		} else {
-			mention = await mainGuildID.roles.cache.find(role => role.name === config["roles-map"][json.mention]);
+			let role = await mainGuildID.roles.cache.find(role => role.name === config["roles-map"][json.mention]);
+
+			if(role.id) { // need to test with event
+				mention = "<@&" + role.id + ">"
+			}
 		}
 	}
 

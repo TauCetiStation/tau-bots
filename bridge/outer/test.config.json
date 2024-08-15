@@ -1,0 +1,19 @@
+{
+	"server-id": "401030271417188353",
+	"channels-map": {
+		"roundstat": [],
+		"service": ["818540839005323316"],
+		"announce": [],
+		"admincom": [],
+		"adminlog": [],
+		"adminalert": [],
+		"adminban": [],
+		"adminwl": [],
+		"adminimportant": [],
+		"ooc": []
+	},
+	"roles-map": {
+		"here": "here",
+		"everyone": "everyone"
+	}
+}

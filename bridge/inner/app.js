@@ -12,9 +12,6 @@ const config = require('./config.json');
 const client = new Discord.Client({
 	intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]
 });
-const byondClient = new http2byond({
-	timeout: 2000
-});
 
 const discordToken = process.env.DISCORD_TOKEN;
 const byondPort = process.env.DD_PORT;
@@ -81,7 +78,8 @@ client.on('messageCreate', async message => {
 	// now we can form and send byond topic
 	let topicConfig = {
 		ip: "localhost",
-		port: byondPort
+		port: byondPort,
+		timeout: 2000
 	};
 
 	topicConfig.topic = "?bridge";
@@ -116,12 +114,12 @@ client.on('messageCreate', async message => {
 	console.log(topicConfig.topic);
 	
 	try {
-		let result = await byondClient.run(topicConfig);
+		let result = await http2byond.sendTopic(topicConfig);
 		console.log(result);
 		return result;
 	} catch (e) {
 		console.error("ERR", e);
-		return message.reply("Game server is not available or under heavy load for some reason.");
+		return message.reply("Game server is not available or under heavy load.");
 	}
 
 });
