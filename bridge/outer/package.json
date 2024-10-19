@@ -3,7 +3,7 @@
   "main": "app.js",
   "dependencies": {
     "discord.js": "^13.17.1",
-    "express": "^4.19.2"
+    "express": "^4.21.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
